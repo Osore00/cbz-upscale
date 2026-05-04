@@ -5,11 +5,11 @@ build-backend = "hatchling.build"
 [project]
 name = "cbz-upscale"
 version = "0.1.0"
-description = "Professional CLI tool for upscaling CBZ comic book archives using AI upscalers"
+description = "CLI tool for upscaling CBZ comic book archives using AI upscalers"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
-authors = [{ name = "Andre" }]
+authors = [{ name = "Osore00" }]
 keywords = ["cbz", "upscale", "comic", "manga", "real-esrgan", "ai"]
 classifiers = [
     "Development Status :: 3 - Alpha",

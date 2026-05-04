@@ -1,0 +1,23 @@
+# CBZ Upscale Configuration Example
+# You can load this file using the --config flag:
+# cbz-upscale --config config.example.yaml comics_folder/
+
+upscaler: realesrgan
+suffix: "_4x"
+keep_temp: false
+verbose: true
+
+# Settings specific to Real-ESRGAN
+realesrgan:
+  scale: 4
+  model: "realesrgan-x4plus-anime"
+  tile_size: 0
+  
+  # For Multi-GPU setups:
+  # gpu_id: [0, 1]
+  # threads: "1:2,2:2"
+
+# Settings for the Dummy upscaler (renames pages instead of scaling)
+dummy:
+  prefix: "chapter1_"
+  zero_padding: 3

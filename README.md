@@ -1,6 +1,6 @@
 # CBZ Upscale
 
-Professional CLI tool for upscaling CBZ comic book archives using AI upscalers like Real-ESRGAN.
+CLI tool for upscaling CBZ comic book archives using AI upscalers like Real-ESRGAN.
 
 ## Features
 - **Modular Backend:** Supports multiple upscaler plugins (Real-ESRGAN, dummy for testing).
