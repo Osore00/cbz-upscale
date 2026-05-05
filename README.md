@@ -47,40 +47,44 @@ List available AI upscaler backends:
 cbz-upscale --list-upscalers
 ```
 
-### Real-ESRGAN Upscaling
+### 1. Using CLI Without a Config File
 
-To use the Real-ESRGAN backend, you must have the `realesrgan-ncnn-vulkan` executable installed and available in your `PATH` (or provide the path to it).
+You can run the tool purely via command-line arguments by explicitly specifying the upscaler backend as the command (e.g., `realesrgan` or `dummy`).
 
-Upscale a single comic file:
+**Basic upscaling:**
 ```bash
 cbz-upscale realesrgan my_comic.cbz
 ```
 
-Upscale an entire directory of comics, utilizing 2 GPUs and Test-Time Augmentation (TTA):
+**Advanced batch upscaling:**
+Upscale an entire directory of comics, utilizing 2 GPUs, Test-Time Augmentation (TTA), and specific tile sizes:
 ```bash
-cbz-upscale realesrgan ./comics/ --gpu-id 0,1 --tta
+cbz-upscale realesrgan ./comics/ --gpu-id 0,1 --tta --tile-size 0,0
 ```
 
-Specify custom scaling and model:
-```bash
-cbz-upscale realesrgan my_comic.cbz --scale 3 --model realesrgan-x4plus
-```
+*Note: To use the `realesrgan` backend, the `realesrgan-ncnn-vulkan` executable must be in your `PATH`, or you must specify its location via `--exe-path`.*
 
-### Configuration via YAML
+### 2. Configuration via YAML (Recommended)
 
-Instead of passing long lists of arguments, you can use a YAML configuration file.
+Instead of passing long lists of arguments every time, you can use a YAML configuration file. This is highly recommended for batch processing or custom GPU setups.
 
-Generate a default `config.yaml` in the current directory:
+**Generate a default `config.yaml`:**
 ```bash
 cbz-upscale --init-config
 ```
+This will create a `config.yaml` in your current directory. You can edit this file to permanently set your preferred `exe_path`, `threads`, `gpu_id`, etc.
 
-Run using the config file:
+### 3. Using the `auto` Command
+
+Once you have set up your `config.yaml`, you no longer need to type the backend name in the CLI. You can use the `auto` command, which automatically reads the `upscaler` field from your config file.
+
+**Run using config settings:**
 ```bash
-cbz-upscale realesrgan my_comic.cbz -c config.yaml
+cbz-upscale auto "C:/comics/input" -c config.yaml -o "C:/comics/output"
 ```
+The tool will automatically use the upscaler defined in `config.yaml` (e.g., `upscaler: realesrgan`) and apply all its specific settings.
 
-CLI arguments always override settings found in the YAML file!
+*Note: Any explicit CLI arguments you pass will always override the settings found in the YAML file!*
 
 ## 🧩 Architecture
 
