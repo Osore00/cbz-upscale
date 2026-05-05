@@ -39,3 +39,4 @@ Thumbs.db
 # Internal planning artifacts
 implementation_plan.md
 task.md
+config.yaml
