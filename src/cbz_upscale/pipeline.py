@@ -82,11 +82,7 @@ class UpscalePipeline:
         output_images_dir = work_dir / "upscaled"
 
         try:
-            # Step 1: Validate environment
-            with step_status("Validating upscaler environment"):
-                self.upscaler.validate_environment()
-
-            # Step 2: Extract archive
+            # Step 1: Extract archive
             with step_status("Extracting archive") as _:
                 extract_result = self.archive.extract(cbz_path, work_dir)
                 console.print(
@@ -99,7 +95,7 @@ class UpscalePipeline:
                 print_error("No images found in the archive.")
                 return None
 
-            # Step 3: Upscale images
+            # Step 2: Upscale images
             console.print("  [step.pending]├─[/step.pending] Upscaling images...")
             with create_progress() as progress:
                 task_id = progress.add_task(
@@ -117,7 +113,7 @@ class UpscalePipeline:
                 )
             console.print("  [step.done]├─ ✓[/step.done] Upscaling images complete")
 
-            # Step 4: Repack archive
+            # Step 3: Repack archive
             with step_status("Repacking archive"):
                 self.archive.repack(
                     image_dir=output_images_dir,
@@ -178,6 +174,14 @@ class UpscalePipeline:
                 print_error(f"No .cbz files found in directory: {input_path}")
                 return []
             console.print(f"Found {len(files_to_process)} archives to process.")
+
+        # Validate environment ONCE before processing any files
+        try:
+            with step_status("Validating upscaler environment"):
+                self.upscaler.validate_environment()
+        except Exception as e:
+            print_error(str(e))
+            return []
 
         for cbz_file in files_to_process:
             result = self.process_file(cbz_file)
