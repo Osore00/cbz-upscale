@@ -112,6 +112,13 @@ Adding a new upscaler (e.g., `waifu2x`) is easy:
 5. Implement `validate_environment()` and `upscale_directory()`.
 6. Add the CLI subcommand in `cli.py`.
 
+## 🙏 Acknowledgments
+
+This project relies on the incredible work of the open-source AI upscaling community. Special thanks to:
+
+- **[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** by xinntao for the core upscaling algorithms.
+- **[realesrgan-ncnn-vulkan](https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan)** by xinntao and nihui for the ultra-fast, cross-platform Vulkan implementation.
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
