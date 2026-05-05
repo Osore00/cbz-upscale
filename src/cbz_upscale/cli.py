@@ -151,6 +151,44 @@ VerboseOpt = Annotated[
 ]
 
 
+@app.command(name="auto")
+def auto_cmd(
+    input_path: InputArg,
+    config: ConfigOpt = None,
+    output: OutputOpt = None,
+    suffix: SuffixOpt = None,
+    keep_temp: KeepTempOpt = None,
+    verbose: VerboseOpt = None,
+) -> None:
+    """Upscale CBZ archives using the backend specified in config.yaml."""
+    try:
+        # Build application config. It will read `upscaler` from YAML or default.
+        app_config = build_config(
+            yaml_path=config,
+            input=input_path,
+            output=output,
+            suffix=suffix,
+            keep_temp=keep_temp,
+            verbose=verbose,
+        )
+
+        # Show header
+        s = app_config.get_upscaler_settings()
+        gpu_info = str(getattr(s, "gpu_id", "")) if hasattr(s, "gpu_id") and s.gpu_id else "auto"
+        scale_info = getattr(s, "scale", "?")
+        console.print(create_header_panel(__version__, app_config.upscaler, scale_info, gpu_info))
+
+        # Run pipeline
+        pipeline = UpscalePipeline(app_config)
+        pipeline.process_batch(input_path)
+
+    except Exception as e:
+        print_error(str(e))
+        if verbose:
+            console.print_exception()
+        sys.exit(1)
+
+
 @app.command(name="realesrgan")
 def realesrgan_cmd(
     input_path: InputArg,
