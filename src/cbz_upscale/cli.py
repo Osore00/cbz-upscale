@@ -15,7 +15,7 @@ from cbz_upscale.upscalers import UpscalerRegistry
 
 app = typer.Typer(
     name="cbz-upscale",
-    help="🖼️  CBZ Upscale — upscale CBZ comic book archives using AI upscalers.",
+    help="CBZ Upscale -- upscale CBZ comic book archives using AI upscalers.",
     no_args_is_help=True,
 )
 
