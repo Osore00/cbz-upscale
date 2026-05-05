@@ -46,7 +46,10 @@ class AppConfig(BaseSettings):
 
     def get_upscaler_settings(self) -> UpscalerSettings:
         """Return the specific settings object for the currently active upscaler."""
-        return getattr(self, self.upscaler)
+        try:
+            return getattr(self, self.upscaler)
+        except AttributeError as e:
+            raise ValueError(f"Unknown upscaler: {self.upscaler}") from e
 
 def load_yaml_config(path: Path) -> dict:
     """Load configuration dictionary from a YAML file."""
@@ -70,14 +73,13 @@ def build_config(yaml_path: Path | None = None, **cli_kwargs) -> AppConfig:
         config_dict.update(load_yaml_config(yaml_path))
         
     # 2. Override with CLI kwargs (only non-None values)
-    cli_overrides = {k: v for k, v in cli_kwargs.items() if v is not None}
-    
-    # Handle nested backend settings if provided via CLI
-    # Currently CLI arguments are flat, we will map them in the CLI layer
-    # or rely on the pipeline to build nested dicts if needed.
-    # For now, we update the root level.
-    config_dict.update(cli_overrides)
-    
+    for k, v in cli_kwargs.items():
+        if v is not None:
+            if isinstance(v, dict) and k in config_dict and isinstance(config_dict[k], dict):
+                config_dict[k].update(v)
+            else:
+                config_dict[k] = v
+                
     return AppConfig(**config_dict)
 
 def generate_default_config() -> str:

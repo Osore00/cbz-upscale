@@ -5,6 +5,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import ClassVar
 
+from cbz_upscale.archive import IMAGE_EXTENSIONS
 from cbz_upscale.config import DummySettings
 from cbz_upscale.upscalers._base import BaseUpscaler
 from cbz_upscale.upscalers._registry import UpscalerRegistry
@@ -37,8 +38,8 @@ class DummyUpscaler(BaseUpscaler):
         """
         output_dir.mkdir(parents=True, exist_ok=True)
         
-        # Collect all files (assuming the archive handler only put images here)
-        images = sorted(f for f in input_dir.rglob("*") if f.is_file())
+        # Collect all files that are supported images
+        images = sorted(f for f in input_dir.rglob("*") if f.is_file() and f.suffix.lower() in IMAGE_EXTENSIONS)
         total_images = len(images)
         
         if total_images == 0:
